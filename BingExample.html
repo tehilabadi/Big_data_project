@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>flight_Bord</title>
+    <meta charset="utf-8" />
+
+    <!-- <link rel="stylesheet" href="style.css" type="text/css"> -->
+    <!-- <script src="https://kit.fontawesome.com/ae58fe11b8.js" crossorigin="anonymous"></script> -->
+    <script src="script.js"></script>
+
+
+    <!-- Reference to the Bing Maps SDK -->
+    <script type='text/javascript'
+        src='http://www.bing.com/api/maps/mapcontrol?callback=GetMap&key=Am7ABZsl1hVs093AjZV82C3wxd-NCQ-KtBLpdtv4uB1UBvqIx7vcgN7Dw1A9RpQt'
+        async defer></script>
+
+    <script type="text/javascript">
+
+        var map = null;
+        function setMap() {
+            // Initialize the map - USE YOUR OWN KEY !
+            map = new Microsoft.Maps.Map(document.getElementById("myMap"), { credentials: "Am7ABZsl1hVs093AjZV82C3wxd-NCQ-KtBLpdtv4uB1UBvqIx7vcgN7Dw1A9RpQt" });
+            
+        }
+    </script>
+
+    <script type='text/javascript'>
+        function add()
+        {
+            console.log("hi");
+            //var loc1 = new Microsoft.Maps.Location(num1,num2);
+            // Add a pin to the map
+            //var pin1 = new Microsoft.Maps.Pushpin(loc1);
+            //map.entities.push(pin1);
+           
+        }
+
+        function move() {
+            for (var i = map.entities.getLength() - 1; i >= 0; i--) {
+                var pushpin = map.entities.get(i);
+                if (pushpin instanceof Microsoft.Maps.Pushpin) {
+                    map.entities.removeAt(i);
+                }
+            }
+        }
