@@ -41,31 +41,28 @@ connection.connect(function(err) {
       })
       .then(async function () {
          count = 1;
-        // console.log(typeof data);
           const dat = JSON.stringify(data)
-        //   console.log(typeof dat);
           for (var key of Object.keys(data)) {
             const myJSON = JSON.stringify(data[key]); 
             const words = myJSON.split(',');
-            console.log(words[11] +" " +words[12])
-            console.log()
             if(words[11]==="\"TLV\""||words[12]==="\"TLV\""){
-            let fly = flight(words);
-            count++;
-            var sql = `INSERT INTO details (id, location1,location2,location3) 
-            VALUES (${fly.id},'${fly.location1}','${fly.location2}','${fly.location3}');`;
+              let fly = flight(words);
+              console.log(words[0]+" "+words[1]+" "+words[2]+" "+words[3]+" "+words[4])
+              console.log(fly.location1+" "+fly.location2+" "+fly.location3)
+
+              count++;
+              var sql = `INSERT INTO details (id, location1,location2,location3) 
+              VALUES (${fly.id},'${fly.location1}','${fly.location2}','${fly.location3}');`;
     
-            connection.query(sql, function (err, result) {
-            if (err) throw err;
-            console.log(`record inserted`);
+              connection.query(sql, function (err, result) {
+              if (err) throw err;
+            // console.log(`record inserted`);
         });
     }
-else{
-    console.log("hi");
-}        }   
+      }   
      }); 
     
   });
   
 
-  module.exports = connection;
+         module.exports = connection;

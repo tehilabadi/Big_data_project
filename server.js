@@ -13,8 +13,10 @@ const controllerRouter = require('./controller'); //controller
 var bodyParser = require('body-parser')
 
 app.set('view engine', 'ejs');
-app.use(express.static('client'));
+// app.use('/client',express.static('client'));
 // app.use(express.static(__dirname + '/public'));
+app.use(express.static('./views'));
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use('/', controllerRouter);
