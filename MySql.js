@@ -42,13 +42,15 @@ connection.connect(function(err) {
       .then(async function () {
          count = 1;
           const dat = JSON.stringify(data)
+          const dat1 = JSON.parse(dat);
+          console.log(typeof dat1);
           for (var key of Object.keys(data)) {
             const myJSON = JSON.stringify(data[key]); 
             const words = myJSON.split(',');
             if(words[11]==="\"TLV\""||words[12]==="\"TLV\""){
               let fly = flight(words);
-              console.log(words[0]+" "+words[1]+" "+words[2]+" "+words[3]+" "+words[4])
-              console.log(fly.location1+" "+fly.location2+" "+fly.location3)
+              // console.log(words[0]+" "+words[1]+" "+words[2]+" "+words[3]+" "+words[4])
+              // console.log(fly.location1+" "+fly.location2+" "+fly.location3)
 
               count++;
               var sql = `INSERT INTO details (id, location1,location2,location3) 

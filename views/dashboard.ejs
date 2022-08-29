@@ -1,26 +1,28 @@
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
+
 <head>
     <title>flight_Bord</title>
     <meta charset="utf-8" />
-
     <meta name="viewport" content="width=device-width, initial-scale=1">
-	<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="vendor/bootstrap/css/bootstrap.min.css">
-	<!--===============================================================================================-->
-	<!-- <link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.7.0/css/font-awesome.min.css"> -->
-	<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="vendor/animate/animate.css">
-	<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="vendor/select2/select2.min.css">
-	<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="vendor/perfect-scrollbar/perfect-scrollbar.css">
-	<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="style.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="vendor/bootstrap/css/bootstrap.min.css">
+    <!--===============================================================================================-->
+    <!-- <link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.7.0/css/font-awesome.min.css"> -->
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="vendor/animate/animate.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="vendor/select2/select2.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="vendor/perfect-scrollbar/perfect-scrollbar.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="style.css">
 
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.min.css">
 
     <!-- Reference to the Bing Maps SDK -->
     <script type='text/javascript'
@@ -28,7 +30,7 @@
         async defer></script>
 
 
-        
+
     <script type="text/javascript">
         function initSocket() {
             //socket is global
@@ -39,49 +41,36 @@
         //console.log(rows);
 
         var map = null;
-        var rows = <%-JSON.stringify(data)%>;
-       
 
-
-        var row = rows[1];
-        var location1 = row.Location;
-        console.log(typeof location1);
-        console.log(location1);
         function setMap() {
             map = new Microsoft.Maps.Map(document.getElementById("myMap"), { credentials: "Am7ABZsl1hVs093AjZV82C3wxd-NCQ-KtBLpdtv4uB1UBvqIx7vcgN7Dw1A9RpQt" });
         }
 
 
-        function add()
-        {
-           
+        function add() {
+            var rows = <%-JSON.stringify(data)%>;
+            console.log(typeof rows);
+            var rows1 = JSON.parse(rows);
+            console.log(typeof rows1);
 
-            var loc1 = new Microsoft.Maps.Location(37.983810,23.727539);
-            var loc2 = new Microsoft.Maps.Location(32.817280,34.988762);
-            var loc3 = new Microsoft.Maps.Location(30.044420, 31.235712);
-            var loc4 = new Microsoft.Maps.Location(35.0, 30.0);
-          
-            // Add a pin to the map
-            var pin1 = new Microsoft.Maps.Pushpin(loc1);
-            var pin2 = new Microsoft.Maps.Pushpin(loc2);
-            var pin3 = new Microsoft.Maps.Pushpin(loc3);
-            
-            pin4 = new Microsoft.Maps.Pushpin(loc4, {
-                //icon: 'airplane.png',
-                anchor: new Microsoft.Maps.Point(10, 10)
-            });
-           
-            // Create a polyline
-            var lineVertices = new Array(loc1, loc2);
-            var line = new Microsoft.Maps.Polyline(lineVertices);
+            for (var key of Object.keys(rows1)) {
+                const myJSON = JSON.stringify(rows1[key]); 
+                const words = myJSON.split(',');
+                var word = JSON.parse(words);
+                var loc1 = new Microsoft.Maps.Location(word.location1, word.location2);
+                var pin1 = new Microsoft.Maps.Pushpin(loc1);
+                map.setView({ center: loc1, zoom: 4 });
+                map.entities.push(pin1);
+                pin4 = new Microsoft.Maps.Pushpin(loc1, {
+                    //icon: 'airplane.png',
+                    anchor: new Microsoft.Maps.Point(10, 10)
+                });
+                map.entities.push(pin4);
 
-            map.setView({ center: loc2, zoom: 4 });
+                console.log(word.location1);
 
-            map.entities.push(line);
-            map.entities.push(pin1);
-            map.entities.push(pin2);
-            map.entities.push(pin3);
-            map.entities.push(pin4);
+              
+            }
            
         }
         function move() {
@@ -91,20 +80,20 @@
                     map.entities.removeAt(i);
                 }
             }
-        }       
-        
+        }
+
     </script>
 </head>
-
+<body>    
 <body onload="initSocket()">
 
     <div id="myMap"></div>
     <input type="button" onclick="add()" value="הוסף אייקונים" />
     <input type="button" onclick="move()" value="הסר אייקונים" />
-    
+
 </body>
+
 </body>
 
 
 </html>
-       
