@@ -26,10 +26,11 @@ const flight = (words) => {
     return fly;
 }
 
-// Insert fake details fly to DB (Table - users)
+// Insert details about flights to DB (Table - users)
 connection.connect(function(err) {
     if (err) throw err;
     console.log("Connected!");
+    setInterval(function () {
 
     axios.get(
         "https://data-cloud.flightradar24.com/zones/fcgi/feed.js?faa=1&bounds=41.449%2C21.623%2C16.457%2C53.063&satellite=1&mlat=1&flarm=1&adsb=1&gnd=1&air=1&vehicles=1&estimated=1&maxage=14400&gliders=1&stats=1")
@@ -44,25 +45,24 @@ connection.connect(function(err) {
           const dat = JSON.stringify(data)
           const dat1 = JSON.parse(dat);
           console.log(typeof dat1);
+          connection.query("DELETE FROM details;" )
           for (var key of Object.keys(data)) {
             const myJSON = JSON.stringify(data[key]); 
             const words = myJSON.split(',');
             if(words[11]==="\"TLV\""||words[12]==="\"TLV\""){
               let fly = flight(words);
-              // console.log(words[0]+" "+words[1]+" "+words[2]+" "+words[3]+" "+words[4])
-              // console.log(fly.location1+" "+fly.location2+" "+fly.location3)
 
               count++;
+              
               var sql = `INSERT INTO details (id, location1,location2,location3) 
               VALUES (${fly.id},'${fly.location1}','${fly.location2}','${fly.location3}');`;
-    
               connection.query(sql, function (err, result) {
               if (err) throw err;
-            // console.log(`record inserted`);
         });
     }
       }   
      }); 
+    }, 1000);
     
   });
   

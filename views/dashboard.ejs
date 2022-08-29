@@ -41,6 +41,7 @@
         //console.log(rows);
 
         var map = null;
+        var counter = document.getElementById("counter");
 
         function setMap() {
             map = new Microsoft.Maps.Map(document.getElementById("myMap"), { credentials: "Am7ABZsl1hVs093AjZV82C3wxd-NCQ-KtBLpdtv4uB1UBvqIx7vcgN7Dw1A9RpQt" });
@@ -49,11 +50,10 @@
 
         function add() {
             var rows = <%-JSON.stringify(data)%>;
-            console.log(typeof rows);
             var rows1 = JSON.parse(rows);
-            console.log(typeof rows1);
 
             for (var key of Object.keys(rows1)) {
+                counter++;
                 const myJSON = JSON.stringify(rows1[key]); 
                 const words = myJSON.split(',');
                 var word = JSON.parse(words);
@@ -62,17 +62,19 @@
                 map.setView({ center: loc1, zoom: 4 });
                 map.entities.push(pin1);
                 pin4 = new Microsoft.Maps.Pushpin(loc1, {
-                    //icon: 'airplane.png',
+                    icon: "views\air2.png",
                     anchor: new Microsoft.Maps.Point(10, 10)
                 });
                 map.entities.push(pin4);
 
-                console.log(word.location1);
+                //console.log(word.location1); -->
 
               
             }
+            
            
         }
+    
         function move() {
             for (var i = map.entities.getLength() - 1; i >= 0; i--) {
                 var pushpin = map.entities.get(i);
@@ -86,10 +88,12 @@
 </head>
 <body>    
 <body onload="initSocket()">
-
     <div id="myMap"></div>
-    <input type="button" onclick="add()" value="הוסף אייקונים" />
-    <input type="button" onclick="move()" value="הסר אייקונים" />
+    <!-- <div id="counter"  {% counter%}></div>מספר מטוסים בתנועה </div> -->
+    <!-- <input id ="add" type="button" onclick="add()" value="הוסף אייקונים" /> -->
+    <!-- <input id ="remove" type="button" onclick="move()" value="הסר אייקונים" /> -->
+    <button id ="remove" onclick="move()" class="btn remove">הסר אייקונים</button>
+    <button id ="add" onclick="add()" class="btn add">הוסף אייקונים</button>
 
 </body>
 

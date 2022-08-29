@@ -10,12 +10,12 @@ const kafkaConf = {
   "socket.keepalive.enable": true,
   "security.protocol": "SASL_SSL",
   "sasl.mechanisms": "SCRAM-SHA-256",
-  "sasl.username": "8iba851e",
-  "sasl.password": "X7vN63uXq6SgNl-VVxJuYkvwEXGtEPbA",
+  "sasl.username": "zo7ok7mo",
+  "sasl.password": "3sl_cer5L5zvjSHJLMJi-N9PrSIpmWH1",
   "debug": "generic,broker,security"
 };
 
-const prefix = "8iba851e-";
+const prefix = "zo7ok7mo-";
 const topic = `${prefix}new`;
 
 const prefix2 = "8iba851e-";
