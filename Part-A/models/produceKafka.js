@@ -2,6 +2,9 @@
 
 const uuid = require("uuid");
 const Kafka = require("node-rdkafka");
+const axios = require('axios');
+
+
 
 // use you own parameters
 const kafkaConf = {
@@ -18,7 +21,7 @@ const kafkaConf = {
 const prefix = "zo7ok7mo-";
 const topic = `${prefix}new`;
 
-const prefix2 = "8iba851e-";
+const prefix2 = "zo7ok7mo-";
 const topic2 = `${prefix2}default`;
 
 
@@ -31,9 +34,12 @@ producer.on("ready", function(arg) {
 });
 producer.connect();
 
-module.exports.publish = function(msg)
+ function publish(msg)
 {   
+  console.log("kafka");
   m=JSON.stringify(msg);
   producer.produce(topic, -1, genMessage(m), uuid.v4());   
-  producer.produce(topic2, -1, genMessage(m), uuid.v4());  
+  // producer.produce(topic2, -1, genMessage(m), uuid.v4());  
 }
+
+module.exports.publish = publish;

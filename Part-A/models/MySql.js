@@ -22,15 +22,14 @@ const flight = (words) => {
         let location3 = words[3];
         let fly = {id,location1,location2,location3};
 
-    
     return fly;
 }
-
+function add(){
+var data = null;
 // Insert details about flights to DB (Table - users)
 connection.connect(function(err) {
     if (err) throw err;
     console.log("Connected!");
-    setInterval(function () {
 
     axios.get(
         "https://data-cloud.flightradar24.com/zones/fcgi/feed.js?faa=1&bounds=41.449%2C21.623%2C16.457%2C53.063&satellite=1&mlat=1&flarm=1&adsb=1&gnd=1&air=1&vehicles=1&estimated=1&maxage=14400&gliders=1&stats=1")
@@ -42,9 +41,6 @@ connection.connect(function(err) {
       })
       .then(async function () {
          count = 1;
-          const dat = JSON.stringify(data)
-          const dat1 = JSON.parse(dat);
-          console.log(typeof dat1);
           connection.query("DELETE FROM details;" )
           for (var key of Object.keys(data)) {
             const myJSON = JSON.stringify(data[key]); 
@@ -62,9 +58,14 @@ connection.connect(function(err) {
     }
       }   
      }); 
-    }, 1000);
+
+    
     
   });
+}
+
+setInterval(add,30000);
   
 
-         module.exports = connection;
+    module.exports = connection;
+

@@ -18,9 +18,14 @@
     <link rel="stylesheet" type="text/css" href="vendor/perfect-scrollbar/perfect-scrollbar.css">
     <!--===============================================================================================-->
     <link rel="stylesheet" type="text/css" href="style.css">
-
+    
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
     <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+    
+
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.min.css">
 
@@ -37,14 +42,17 @@
             socket = io.connect();
             alert("connected");
             setMap();
+            startTime();
         }
         //console.log(rows);
+
+
 
         var map = null;
         var counter = document.getElementById("counter");
 
         function setMap() {
-            map = new Microsoft.Maps.Map(document.getElementById("myMap"), { credentials: "Am7ABZsl1hVs093AjZV82C3wxd-NCQ-KtBLpdtv4uB1UBvqIx7vcgN7Dw1A9RpQt" });
+            map = new Microsoft.Maps.Map(document.getElementById("myMap"), { credentials: "Aj-ABRf9OVQpNZTlbfu4v4yw8RWjR5Zl_XXEd0IUlAVAKKbg9vbr5ZCp6VvnLDTV" });
         }
 
 
@@ -60,12 +68,13 @@
                 var loc1 = new Microsoft.Maps.Location(word.location1, word.location2);
                 var pin1 = new Microsoft.Maps.Pushpin(loc1);
                 map.setView({ center: loc1, zoom: 4 });
-                map.entities.push(pin1);
+                //map.entities.push(pin1);
                 pin4 = new Microsoft.Maps.Pushpin(loc1, {
-                    icon: "views\air2.png",
+                    icon: "./icons/plan.png",
                     anchor: new Microsoft.Maps.Point(10, 10)
                 });
                 map.entities.push(pin4);
+                
 
                 //console.log(word.location1); -->
 
@@ -88,15 +97,38 @@
 </head>
 <body>    
 <body onload="initSocket()">
+
+    <img id = "img-plane" src = ".\icons\flights (1).png" width="140" alt="logo">
+    <div id="txt"></div>
     <div id="myMap"></div>
-    <!-- <div id="counter"  {% counter%}></div>מספר מטוסים בתנועה </div> -->
-    <!-- <input id ="add" type="button" onclick="add()" value="הוסף אייקונים" /> -->
-    <!-- <input id ="remove" type="button" onclick="move()" value="הסר אייקונים" /> -->
-    <button id ="remove" onclick="move()" class="btn remove">הסר אייקונים</button>
-    <button id ="add" onclick="add()" class="btn add">הוסף אייקונים</button>
+    <script type='text/javascript' src='https://www.bing.com/api/maps/mapcontrol?callback=GetMap&key=Aj-ABRf9OVQpNZTlbfu4v4yw8RWjR5Zl_XXEd0IUlAVAKKbg9vbr5ZCp6VvnLDTV' async defer></script>
+      <!-- <div id="counter"  {% counter%}></div>מספר מטוסים בתנועה </div> -->
+    <button id ="remove" onclick="move()" >הסר אייקונים</button>
+    <button id ="add" onclick="add()" >הוסף אייקונים</button>
+    
+  
+    <script>
+    function startTime() {
+      const today = new Date();
+      let h = today.getHours();
+      let m = today.getMinutes();
+      let s = today.getSeconds();
+      m = checkTime(m);
+      s = checkTime(s);
+      document.getElementById('txt').innerHTML =  h + ":" + m + ":" + s;
+      setTimeout(startTime, 1000);
+    }
+    
+    function checkTime(i) {
+      if (i < 10) {i = "0" + i};  // add zero in front of numbers < 10
+      return i;
+    }
+    </script>
+    
+
 
 </body>
-
+   
 </body>
 
 
