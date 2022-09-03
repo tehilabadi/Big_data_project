@@ -1,0 +1,15 @@
+{
+  "name": "part-b",
+  "version": "1.0.0",
+  "description": "",
+  "main": "consumerKafka.js",
+  "scripts": {
+    "start": "node serverB.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "ioredis": "^5.2.3"
+  }
+}

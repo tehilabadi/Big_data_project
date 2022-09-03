@@ -17,11 +17,11 @@
 #myMap{
     width: 70%;
     height: 400px;
-    margin-top:-35px; 
-    margin-left:200px;
-    padding: 14px 28px;
-    border-radius: 10px;
-    border: 2px solid rgb(164, 14, 102);
+    margin-top:-90px; 
+    margin-left:180px;
+    /* padding: 14px 28px; */
+    border-radius: 8px;
+    border: 2px solid rgb(75, 6, 46);
     position : center;
 
 
@@ -31,27 +31,64 @@
 
   
 }
+
 #txt{
   font-size:3ch;
-  margin-left:22px;
-  margin-top:-20px;
-  color: rgb(60, 117, 164);
-  box-sizing: border-box;
-  border: rgb(60, 117, 164);
+  color:white;
+  /* box-sizing: border-box; */
+  /* border: rgb(60, 117, 164); */
   
 }
+.textb2{
+  font-size:15px;
+  color:rgb(178, 58, 126);
+}
+.count{
+  font-size:15px;
+  color:rgb(23, 118, 123);
+  position: inherit;
+  padding-left: 70px;
+  padding-bottom: 10px;
+}
+.borderexample {
+  width:110px;
+  height: 50px;
+  padding: 4px;
+  margin-left:18px;
+  /* margin-top:px; */
+  border-style:solid;
+  border-radius: 10px;
+  border-color: white;
+  background-color: rgb(1, 8, 8);
+}
+
+.borderexample2 {
+  width:180px;
+  height:70px;
+  padding: 4px;
+  padding-left: 4px;
+  margin-left:1090px;
+  margin-top:-300px;
+  border-radius: 10px;
+  border-style:solid;
+  border-color: black;
+  background-color: azure;
+  overflow: hidden;
+}
+
+
+
 #add{
     width: 10%;
     height: 40px;
     margin-right:10px;
     margin-left:10px;
-    margin-top:15px;
-
+    margin-top:240px;
     background-color:white;
     font-size: 16px;
     border-radius: 10px;
-    border-color: rgb(23, 148, 106);
-    color:rgb(23, 148, 106);
+    border-color: rgb(23, 118, 123);
+    color:rgb(23, 118, 123);
     border-style: solid;
 
 
@@ -60,14 +97,14 @@
     width: 10%;
     height: 40px;
     margin-right:10px;
-    margin-left:500px;
+    margin-left:430px;
     margin-top:15px;
 
     background-color:white;
     font-size: 16px;
     border-radius: 10px;
-    border-color: rgb(23, 148, 106);
-    color:rgb(23, 148, 106);
+    border-color: rgb(23, 118, 123);
+    color:rgb(23, 118, 123);
     border-style: solid;
     
 

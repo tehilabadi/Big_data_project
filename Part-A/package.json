@@ -68,6 +68,9 @@
   "express-ejs-layouts": "^2.5.1",
   
     
+  "ioredis": "^5.2.3",
+  
+    
   "JSON": "^1.0.0",
   
     

@@ -1,8 +1,8 @@
 const mysql = require('mysql2');
-// const {faker} = require("@faker-js/faker");
 const axios = require('axios');
 const { response } = require('express');
 const express = require('express');
+const { _makeLong } = require('path');
 const router = express.Router();
 
 var connection = mysql.createConnection({
@@ -12,7 +12,7 @@ var connection = mysql.createConnection({
   password: 'QqWwEe6559@',
   database: 'flights'
 });
-
+var url = 'http://data-live.flightradar24.com/clickhandler/?version=1.5&flight=';
 
 const flight = (words) => {
     
@@ -20,10 +20,20 @@ const flight = (words) => {
         let location1 = words[1];
         let location2 = words[2];
         let location3 = words[3];
-        let fly = {id,location1,location2,location3};
+        let dir;
+        if(words[11]==words[11]==="\"TLV\""){
+          dir = true;
+        }
+        else{
+          dir = false;
+
+        }
+        let fly = {id,location1,location2,location3,dir};
 
     return fly;
 }
+
+
 function add(){
 var data = null;
 // Insert details about flights to DB (Table - users)
@@ -40,21 +50,40 @@ connection.connect(function(err) {
           console.log("error")
       })
       .then(async function () {
+
          count = 1;
           connection.query("DELETE FROM details;" )
           for (var key of Object.keys(data)) {
-            const myJSON = JSON.stringify(data[key]); 
+            const myJSON = JSON.stringify(data[key]);
             const words = myJSON.split(',');
             if(words[11]==="\"TLV\""||words[12]==="\"TLV\""){
-              let fly = flight(words);
-
-              count++;
-              
-              var sql = `INSERT INTO details (id, location1,location2,location3) 
-              VALUES (${fly.id},'${fly.location1}','${fly.location2}','${fly.location3}');`;
+              axios.get(url+key)
+              .then(async function (response) {
+                mongoData = response.data;
+                let fly = flight(words);
+                var sql = `INSERT INTO details (id, location1,location2,location3, scheduleddeparture, scheduledarrival,realdeparture,realarrival,estimateddeparture,estimatedarrival,landing) 
+              VALUES (${fly.id},'${fly.location1}','${fly.location2}','${fly.location3}','${mongoData.time.scheduled.departure}','${mongoData.time.scheduled.arrival}','${mongoData.time.real.departure}','${mongoData.time.real.arrival}','${mongoData.time.estimated.departure}','${mongoData.time.estimated.arrival}','${fly.dir}');`;
               connection.query(sql, function (err, result) {
               if (err) throw err;
         });
+
+
+                // console.log(key);
+              })
+              .catch(async function (error) {
+                  console.log("error"+ " "+error)
+                  
+              })
+              .then(async function () {
+                // console.log("data from mongo");
+              });
+              
+              // console.log("sql vibes");
+
+
+              count++;
+              
+              
     }
       }   
      }); 
@@ -65,7 +94,7 @@ connection.connect(function(err) {
 }
 
 setInterval(add,30000);
-  
+  // add();
 
     module.exports = connection;
 
