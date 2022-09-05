@@ -16,11 +16,9 @@ app.use(express.json());
 
 
 io.on("connection", async (socket) => {
-    //Get data from redis to dashboard
-    let allDataArray = await redis.getAllData();
+    console.log("io connect");
     
-    io.emit('allData', 
-    {location1: allDataArray[0],location2: allDataArray[1], location3: allDataArray[2]});
+
 
     socket.on('resetDB', function () {
         // reset redis
@@ -28,31 +26,55 @@ io.on("connection", async (socket) => {
     });
 
 });
+    kafka.consumer.on("data", async (msg) => {
+        let flight = JSON.parse(msg.value);
+        io.emit("new_flight", {location1: flight.lo, location2: flight.lo2, location3: flight.degree , direction :flight.direction});
+
+
+        //         flight.lo = word.location1;
+        //         flight.lo2 = word.location2;
+        //         flight.degree=word.location3;
+        //         flight.scheduleddeparture = word.scheduleddeparture;
+        //         flight.lscheduledarrival = word.scheduledarrival;
+        //         flight.realdeparture=word.realdeparture;
+        //         flight.realarrival=word.realarrival;
+        //         flight.estimateddeparture=word.estimateddeparture;
+        //         flight.estimatedarrival=word.estimatedarrival;
+        //         flight.id = word.TZ;
+        console.log("kaafka info");
+        // console.log(flight.lo);
+    });
+
+    //Get data from redis to dashboard
+    // let allDataArray = await redis.getAllData();
+    // // console.log(allDataArray+ " serverB");
+    // // console.log(typeof allDataArray);
+    // io.emit('allData', 
+    // {location1: allDataArray[0],location2: allDataArray[1], location3: allDataArray[2]});
+    // socket.on('resetDB', function () {
+    //     // reset redis
+    //     redis.initDB(); 
+    // });
+
+
 
 
 // ------------Consumer from Kafka-----------------
-kafka.consumer.on("data", async (msg) => {
-    const newCall = JSON.parse(msg.value);
-
-    // **Store the data in Redis and after send to Dashboard */
-     
-
-        io.emit("new flight",
-        {firstname: newCall.firstName, lastname: newCall.lastName, phone: newCall.phone
-            , topic: newCall.topic, totaltime: newCall.totalTime});
-
-        redis.setTopic(newCall.topic,0);
-    
-
-    //Get data from redis to dashboard
-    let allDataArray = await redis.getAllData();
-    
-    //Send to front with socket
-    io.emit('allData', {join: allDataArray[0]});
-});
+// kafka.consumer.on("data", async (msg) => {
+//     const flight = JSON.parse(msg.value);
+//     console.log("waiting...");
+//     redis.setTopic('location1',msg.value);
+//     io.emit("new_flight", {location1: flight.location1, location2: flight.location2, location3: flight.location3});
+//     // redis.setTopic(newCall.topic,0);
+//     let allDataArray = await redis.getAllData();
+//     //Send to front with socket
+//     console.log("before emit");
+//     io.emit('allData', {location1: allDataArray[0],location2:allDataArray[1],location3:allDataArray[2]});
+//     console.log("server published");
+// });
 
 
-//----------------Front Side - Daily Call Center ------------------
+//----------------Front Side  ------------------
 
 app.use('/', controllerRouter);
 

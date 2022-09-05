@@ -14,15 +14,15 @@ const kafkaConf = {
   
   "security.protocol": "SASL_SSL",
   "sasl.mechanisms": "SCRAM-SHA-256",
-  "sasl.username": "8iba851e",
-  "sasl.password": "X7vN63uXq6SgNl-VVxJuYkvwEXGtEPbA",
+  "sasl.username": "0o2s7ydw",
+  "sasl.password": "2SAAzNrd5iCOdBlKIicPoypaJT_XrRJG",
   "debug": "generic,broker,security"
 };
 
-const prefix = "8iba851e-";
+const prefix = "0o2s7ydw-";
 const topic = `${prefix}default`;
 
-const prefix2 = "8iba851e-";
+const prefix2 = "0o2s7ydw-";
 const topic2 = `${prefix2}new`;
 
 
@@ -34,12 +34,15 @@ producer.on("ready", function(arg) {
   console.log(`producer ${arg.name} ready.`); 
 });
 producer.connect();
-
 module.exports.publish = function(msg)
 {   
-  console.log("kafka");
+  
   m=JSON.stringify(msg);
   producer.produce(topic, -1, genMessage(m), uuid.v4());   
-  producer.produce(topic2, -1, genMessage(m), uuid.v4());  
+  // producer.produce(topic2, -1, genMessage(m), uuid.v4());  
 }
+producer.on("error", (err) => {
+  console.log("error producer");
+    console.error(err);
+  });
 

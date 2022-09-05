@@ -10,6 +10,7 @@ router.get('/', (req, res) => { //(URL || Path , Call back function)
         if (err) throw err;
         result1 = JSON.stringify(result);
         console.log("controller");
+        // res.send(result1);
         res.render('dashboard' ,{data: result1});
  
 })

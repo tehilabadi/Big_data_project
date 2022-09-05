@@ -21,12 +21,11 @@ const flight = (words) => {
         let location2 = words[2];
         let location3 = words[3];
         let dir;
-        if(words[11]==words[11]==="\"TLV\""){
-          dir = true;
+        if(words[11]==="\"TLV\""){
+          dir = 1;
         }
         else{
-          dir = false;
-
+          dir = 0;
         }
         let fly = {id,location1,location2,location3,dir};
 
@@ -54,6 +53,7 @@ connection.connect(function(err) {
          count = 1;
           connection.query("DELETE FROM details;" )
           for (var key of Object.keys(data)) {
+            let temp = key;
             const myJSON = JSON.stringify(data[key]);
             const words = myJSON.split(',');
             if(words[11]==="\"TLV\""||words[12]==="\"TLV\""){
@@ -61,8 +61,8 @@ connection.connect(function(err) {
               .then(async function (response) {
                 mongoData = response.data;
                 let fly = flight(words);
-                var sql = `INSERT INTO details (id, location1,location2,location3, scheduleddeparture, scheduledarrival,realdeparture,realarrival,estimateddeparture,estimatedarrival,landing) 
-              VALUES (${fly.id},'${fly.location1}','${fly.location2}','${fly.location3}','${mongoData.time.scheduled.departure}','${mongoData.time.scheduled.arrival}','${mongoData.time.real.departure}','${mongoData.time.real.arrival}','${mongoData.time.estimated.departure}','${mongoData.time.estimated.arrival}','${fly.dir}');`;
+                var sql = `INSERT INTO details (id, location1,location2,location3, scheduleddeparture, scheduledarrival,realdeparture,realarrival,estimateddeparture,estimatedarrival,landing,TZ) 
+              VALUES (${fly.id},'${fly.location1}','${fly.location2}','${fly.location3}','${mongoData.time.scheduled.departure}','${mongoData.time.scheduled.arrival}','${mongoData.time.real.departure}','${mongoData.time.real.arrival}','${mongoData.time.estimated.departure}','${mongoData.time.estimated.arrival}','${fly.dir}','${temp}');`;
               connection.query(sql, function (err, result) {
               if (err) throw err;
         });
@@ -71,7 +71,7 @@ connection.connect(function(err) {
                 // console.log(key);
               })
               .catch(async function (error) {
-                  console.log("error"+ " "+error)
+                  // console.log("error"+ " "+error+" "+(typeof key));
                   
               })
               .then(async function () {
@@ -82,9 +82,10 @@ connection.connect(function(err) {
 
 
               count++;
+            }
               
               
-    }
+    
       }   
      }); 
 
@@ -93,8 +94,8 @@ connection.connect(function(err) {
   });
 }
 
-setInterval(add,30000);
-  // add();
+// setInterval(add,10000);
+add();
 
     module.exports = connection;
 

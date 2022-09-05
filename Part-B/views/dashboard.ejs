@@ -3,29 +3,17 @@
 
 <head>
     <title>flight_Bord</title>
+    <link rel="shortcut icon" href="./icons/favicon.ico" />
+
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="vendor/bootstrap/css/bootstrap.min.css">
-    <!--===============================================================================================-->
-    <!-- <link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.7.0/css/font-awesome.min.css"> -->
-    <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="vendor/animate/animate.css">
-    <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="vendor/select2/select2.min.css">
-    <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="vendor/perfect-scrollbar/perfect-scrollbar.css">
-    <!--===============================================================================================-->
     <link rel="stylesheet" type="text/css" href="style.css">
-    
+
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
     <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
-    
-
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.min.css">
 
     <!-- Reference to the Bing Maps SDK -->
@@ -33,60 +21,158 @@
         src='http://www.bing.com/api/maps/mapcontrol?callback=GetMap&key=Am7ABZsl1hVs093AjZV82C3wxd-NCQ-KtBLpdtv4uB1UBvqIx7vcgN7Dw1A9RpQt'
         async defer></script>
 
-
-
     <script type="text/javascript">
+        var containerA = {};
+        var containerB = {};
+        let counterA = 0;
+        let counterB = 0;
+        var map = null;
+        
+
         function initSocket() {
             //socket is global
             socket = io.connect();
             alert("connected");
             setMap();
             startTime();
-            
+            containerA = {};
+            containerB = {};
+
+            counterA = 0;
+            counterB = 0;
+
+            const fligh = (l1, l2, l3) => {
+
+                let location1 = l1;
+                let location2 = l2;
+                let location3 = l3;
+
+                let fly = { location1, location2, location3 };
+
+                return fly;
+            }
+
+            socket.on('new_flight', function (msg) {
+                console.log(msg.direction);
+                let flight = fligh(msg.location1, msg.location2, msg.location3);
+                if (msg.direction==0){
+                    containerA[counterA++] = flight;
+                }
+                else{
+                    containerB[counterB++] = flight;
+
+                }
+                document.getElementById('counterA').innerHTML = counterA;
+                document.getElementById('counterB').innerHTML = counterB;
+
+                //console.log(counter);
+            });
+
+            socket.on('allData', function (msg) {
+                //console.log("dataa"); 
+                //console.log(typeof msg);
+                //val = msg["location1"]
+                ///my = JSON.parse(val)
+                //let flight = fligh(my.lo,my.lo2,my.degree);
+                //flight.location1 = my.lo;
+                //flight.location2 = my.lo2;
+                //flight.location3 = my.degree;
+                //container[counter] = flight;
+                //console.log(typeof container[0].location1);
+                //counter++;
+            });
+
+
+
+
+            //var counter = document.getElementById("counter");
+            var count = 0;
+            function setMap() {
+                map = new Microsoft.Maps.Map(document.getElementById("myMap"), { credentials: "Aj-ABRf9OVQpNZTlbfu4v4yw8RWjR5Zl_XXEd0IUlAVAKKbg9vbr5ZCp6VvnLDTV" });
+            }
         }
-        //console.log(rows);
 
-
-
-        var map = null;
-        var counter = document.getElementById("counter");
-
-        function setMap() {
-            map = new Microsoft.Maps.Map(document.getElementById("myMap"), { credentials: "Aj-ABRf9OVQpNZTlbfu4v4yw8RWjR5Zl_XXEd0IUlAVAKKbg9vbr5ZCp6VvnLDTV" });
+        function resetInfo() {
+            socket.emit('resetDB');
         }
-
 
         function add() {
-          
-            var rows = <%-JSON.stringify(data)%>;
-            counter = 0;
-            var rows1 = JSON.parse(rows);
-            console.log(rows1);
-            for (var key of Object.keys(rows1)) {
-                counter++;
-                const myJSON = JSON.stringify(rows1[key]); 
-                console.log(myJSON);
-                const words = myJSON.split(',');
-                var word = JSON.parse(words);
-                var loc1 = new Microsoft.Maps.Location(word.location1, word.location2);
-                var pin1 = new Microsoft.Maps.Pushpin(loc1);
-                map.setView({ center: loc1, zoom: 4 });
-                //map.entities.push(pin1);
-                pin4 = new Microsoft.Maps.Pushpin(loc1, {
-                    icon: "./icons/plan.png",
-                    anchor: new Microsoft.Maps.Point(10, 10)
-                });
-                map.entities.push(pin4);
-                
+            //init();  
+            //console.log(container[1]);
+            var loc1 = new Microsoft.Maps.Location(containerA[0].location1, containerA[0].location2);
+            var pin1 = new Microsoft.Maps.Pushpin(loc1);
+            map.setView({ center: loc1, zoom: 4 });
+            //console.log("add method"+" "+counter); 
+            for (let i = 0; i < counterA; i++) {
+                loc1 = new Microsoft.Maps.Location(containerA[i].location1, containerA[i].location2);
+                if (containerA[i].location3 < 90) {
+                    pin4 = new Microsoft.Maps.Pushpin(loc1, {
+                        icon: "./icons/pl1.png"
+                    });
+                    map.entities.push(pin4);
+                }
+                else if (containerA[i].location3 < 180) {
+                    pin4 = new Microsoft.Maps.Pushpin(loc1, {
+                        icon: "./icons/pl2.png"
 
-                //console.log(word.location1); -->
+                    });
+                    map.entities.push(pin4);
+                }
+                else if (containerA[i].location3 < 270) {
+                    pin4 = new Microsoft.Maps.Pushpin(loc1, {
+                        icon: "./icons/pl3.png"
 
-              
+                    });
+                    map.entities.push(pin4);
+                }
+                else if (containerA[i].location3 < 360) {
+                    pin4 = new Microsoft.Maps.Pushpin(loc1, {
+                        icon: "./icons/pl4.png"
+
+                    });
+                    map.entities.push(pin4);
+                }
             }
-            
-           
+
+            for (let i = 0; i < counterB; i++) {
+                loc1 = new Microsoft.Maps.Location(containerB[i].location1, containerB[i].location2);
+                if (containerB[i].location3 < 90) {
+                    pin4 = new Microsoft.Maps.Pushpin(loc1, {
+                        icon: "./icons/pl1.png"
+                    });
+                    map.entities.push(pin4);
+                }
+                else if (containerB[i].location3 < 180) {
+                    pin4 = new Microsoft.Maps.Pushpin(loc1, {
+                        icon: "./icons/pl2.png"
+
+                    });
+                    map.entities.push(pin4);
+                }
+                else if (containerB[i].location3 < 270) {
+                    pin4 = new Microsoft.Maps.Pushpin(loc1, {
+                        icon: "./icons/pl3.png"
+
+                    });
+                    map.entities.push(pin4);
+                }
+                else if (containerB[i].location3 < 360) {
+                    pin4 = new Microsoft.Maps.Pushpin(loc1, {
+                        icon: "./icons/pl4.png"
+
+                    });
+                    map.entities.push(pin4);
+                }
+            }
+
+
+
         }
-    
+
+
+
+
+
         function move() {
             for (var i = map.entities.getLength() - 1; i >= 0; i--) {
                 var pushpin = map.entities.get(i);
@@ -98,41 +184,54 @@
 
     </script>
 </head>
-<body>    
-<body onload="initSocket()">
 
-    <img id = "img-plane" src = "./icons/flights (1).png" width="140" alt="logo">
-    <div id="txt"></div>
-    <div id="myMap"></div>
-    <script type='text/javascript' src='https://www.bing.com/api/maps/mapcontrol?callback=GetMap&key=Aj-ABRf9OVQpNZTlbfu4v4yw8RWjR5Zl_XXEd0IUlAVAKKbg9vbr5ZCp6VvnLDTV' async defer></script>
-    <a class="b2" role="link"><div class="textb2">טיסות ממתינות להמראה </div></bar><div class="numFlight"><%= counter %></div></a>
-    <!-- href="/flight" -->
-    <button id ="remove" onclick="move()" >הסר אייקונים</button>
-    <button id ="add" onclick="add()" >הוסף אייקונים</button>
-    
-  
-    <script>
-    function startTime() {
-      const today = new Date();
-      let h = today.getHours();
-      let m = today.getMinutes();
-      let s = today.getSeconds();
-      m = checkTime(m);
-      s = checkTime(s);
-      document.getElementById('txt').innerHTML =  h + ":" + m + ":" + s;
-      setTimeout(startTime, 1000);
-    }
-    
-    function checkTime(i) {
-      if (i < 10) {i = "0" + i};  // add zero in front of numbers < 10
-      return i;
-    }
-    </script>
-    
+<body >
+
+    <body onload="initSocket()" >
+        <!-- <p id="rows"></p> -->
+        <img id="img-plane" src="./icons/flights (1).png" width="155" alt="logo">
+        <p class="borderexample"><a id="txt"></p>
+
+        <script type='text/javascript'
+            src='https://www.bing.com/api/maps/mapcontrol?callback=GetMap&key=Aj-ABRf9OVQpNZTlbfu4v4yw8RWjR5Zl_XXEd0IUlAVAKKbg9vbr5ZCp6VvnLDTV'
+            async defer></script>
+        <!-- <p class="borderexample2"><a class="textb2">טיסות ממתינות להמראה </bar><a class="count" id="counterA"></p> -->
+        <!-- <p class="borderexample3"><a class="textb2">טיסות ממתינות לנחיתה </bar><a class="count" id="counterB"></p> -->
+        
+            <button class="button-17" role="button"><a class="textb2">טיסות ממתינות להמראה </bar><a class="count" id="counterA"></button>
+        <button class="button-18" role="button"><a class="textb2">טיסות ממתינות לנחיתה </bar><a class="count" id="counterB"></button>
+        <p style="position:unset"  id="myMap"></p>
+
+        <button id="remove" onclick="move()">הסר אייקונים</button>
+        <button id="add" onclick="add()">הוסף אייקונים</button>
+     
 
 
-</body>
-   
+
+
+
+        <script>
+            function startTime() {
+                const today = new Date();
+                let h = today.getHours();
+                let m = today.getMinutes();
+                let s = today.getSeconds();
+                m = checkTime(m);
+                s = checkTime(s);
+                document.getElementById('txt').innerHTML = h + ":" + m + ":" + s;
+                setTimeout(startTime, 1000);
+            }
+
+            function checkTime(i) {
+                if (i < 10) { i = "0" + i };  // add zero in front of numbers < 10
+                return i;
+            }
+        </script>
+
+
+
+    </body>
+
 </body>
 
 

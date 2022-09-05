@@ -1,9 +1,6 @@
 const db = require('./redisConnection');
 
-
-
-const keys = ["counter"];
-
+const keys = ["location1","location2","location3"];
 
 const todayEnd = new Date().setHours(23, 59, 59, 999);
 
@@ -38,7 +35,7 @@ const redisDB = {
             if(!exists) {
                // init the key and increaments
                await db.set(key, 1);  
-               console.log(`updated ${key} number: ` + 1);
+            //    console.log(`updated ${key} number: ` + 1);
             
             }
 
@@ -48,7 +45,7 @@ const redisDB = {
         
                 // increments and stores the updated data in the database
                 await db.set(key, ++value);
-                console.log(`updated ${key} number: ${value}`);
+                // console.log(`updated ${key} number: ${value}`);
             }
         
         } catch (error) {
@@ -61,7 +58,7 @@ const redisDB = {
         try {
             // stores the data in the database
             await db.set(key, value);
-            console.log(`updated ${key} number: ${value}`);
+            // console.log(`updated ${key} number: ${value}`);
         
         } catch (error) {
             console.log(error);
@@ -72,53 +69,34 @@ const redisDB = {
     setTopic: async function(topic, value) {
         // we can refactor this
         switch(topic) {
-            case 'counter':
-                await this.incrementByOne('location1');
+            case 'location1':
+                await this.setWaiting('location1', value);
+                break;
+            case 'location2':
+                await this.setWaiting('location2', value);
+                break;
+            case 'location3':
+                await this.setWaiting('location3', value);
+                break;
+            default:
+                console.log('invalid topic');
                 break;
             }
+            
     },
     
-    // //Increase value of specific city
-    // setCity: async function (city){
-    //     switch(city) {
-    //         case 'Jerusalem':
-    //             await this.incrementByOne('Jerusalem');
-    //             break;
-    //         case 'Nahariya':
-    //             await this.incrementByOne('Nahariya');
-    //             break;
-    //         case 'Haifa':
-    //             await this.incrementByOne('Haifa');
-    //             break;
-    //         case 'Tel-Aviv':
-    //             await this.incrementByOne('Tel_Aviv');
-    //             break;
-    //         case 'Ashdod':
-    //             await this.incrementByOne('Ashdod');
-    //             break;
-    //         case 'Ashkelon':
-    //             await this.incrementByOne('Ashkelon');
-    //             break;
-    //         case 'Beer-Sheva':
-    //             await this.incrementByOne('Beer_Sheva');
-    //             break;
-    //         default:
-    //             console.log('invalid City');
-    //             break;
-    //         }
-    // },
+    
 
     getAllData: async function() {
         let allData = [];
 
         //Topic + waiting
-        allData.push(await db.get('counter'));
-      
-       
-
-        //Cities
+        allData.push(await db.get('location1'));
         
-        console.log("Get all data from Redis!");
+        //Cities
+        // console.log("Get all data from Redis!");
+        // console.log(allData);
+
         return allData;
     },
     
