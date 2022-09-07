@@ -47,6 +47,9 @@
                 flight.estimateddeparture=word.estimateddeparture;
                 flight.estimatedarrival=word.estimatedarrival;
                 flight.id = word.TZ;
+                flight.src = word.src;
+                flight.dest = word.dest;
+
 
                 socket.emit("currentFlights", flight);
                 socket.emit("numberOfFlights",counter);

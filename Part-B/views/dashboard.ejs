@@ -27,9 +27,10 @@
         let counterA = 0;
         let counterB = 0;
         var map = null;
-        
+
 
         function initSocket() {
+
             //socket is global
             socket = io.connect();
             alert("connected");
@@ -37,7 +38,6 @@
             startTime();
             containerA = {};
             containerB = {};
-
             counterA = 0;
             counterB = 0;
 
@@ -53,13 +53,15 @@
             }
 
             socket.on('new_flight', function (msg) {
-                console.log(msg.direction);
+                //console.log(JSON.stringify(msg));
                 let flight = fligh(msg.location1, msg.location2, msg.location3);
-                if (msg.direction==0){
+                if (msg.direction == 0) {
                     containerA[counterA++] = flight;
+                    myFunction(msg.TZ, msg.arrivel, msg.src, msg.dest);
                 }
-                else{
+                else {
                     containerB[counterB++] = flight;
+                    myFunction1(msg.TZ, msg.arrivel, msg.src, msg.dest);
 
                 }
                 document.getElementById('counterA').innerHTML = counterA;
@@ -69,19 +71,25 @@
             });
 
             socket.on('allData', function (msg) {
-                //console.log("dataa"); 
-                //console.log(typeof msg);
-                //val = msg["location1"]
-                ///my = JSON.parse(val)
-                //let flight = fligh(my.lo,my.lo2,my.degree);
-                //flight.location1 = my.lo;
-                //flight.location2 = my.lo2;
-                //flight.location3 = my.degree;
-                //container[counter] = flight;
-                //console.log(typeof container[0].location1);
-                //counter++;
             });
+            socket.on("weather", function (msg) {
+                console.log(JSON.stringify(msg));
+                document.getElementById("tempeture").innerHTML = msg.temp;
+                //document.getElementById("icon").innerHTML = msg.icon;
+                var icon = msg.icon;
+                document.getElementById("iconIMG").src = "./icons/"+msg.icon+".png";
+                document.getElementById("description").innerHTML = JSON.parse(msg.description);
 
+                
+
+
+            });
+            socket.on("newConnection", function (msg) {
+                var containerA = {};
+                var containerB = {};
+                let counterA = 0;
+                let counterB = 0;
+            });
 
 
 
@@ -182,29 +190,152 @@
             }
         }
 
+
+
     </script>
 </head>
 
-<body >
+<body>
 
-    <body onload="initSocket()" >
-        <!-- <p id="rows"></p> -->
-        <img id="img-plane" src="./icons/flights (1).png" width="155" alt="logo">
+    <body onload="initSocket()">
+        <img id="img-plane" src="./icons/flights (1).png" width="160" alt="logo">
         <p class="borderexample"><a id="txt"></p>
 
-        <script type='text/javascript'
-            src='https://www.bing.com/api/maps/mapcontrol?callback=GetMap&key=Aj-ABRf9OVQpNZTlbfu4v4yw8RWjR5Zl_XXEd0IUlAVAKKbg9vbr5ZCp6VvnLDTV'
-            async defer></script>
-        <!-- <p class="borderexample2"><a class="textb2">טיסות ממתינות להמראה </bar><a class="count" id="counterA"></p> -->
-        <!-- <p class="borderexample3"><a class="textb2">טיסות ממתינות לנחיתה </bar><a class="count" id="counterB"></p> -->
-        
-            <button class="button-17" role="button"><a class="textb2">טיסות ממתינות להמראה </bar><a class="count" id="counterA"></button>
-        <button class="button-18" role="button"><a class="textb2">טיסות ממתינות לנחיתה </bar><a class="count" id="counterB"></button>
-        <p style="position:unset"  id="myMap"></p>
 
+        <div id="b3">
+            <link rel="stylesheet" href="./stylesheets/styleWeather.css">
+            <div class="container">
+                <div class="notification"> </div>
+                <div class="weather-container">
+                    <div class="weather-icon" id="icon">
+                        <img id = "iconIMG" src="./icons/unknown.png" alt="">
+                    </div>
+                    <div class="temperature-description">
+                        <p><a id = "description"></a></p>
+                    </div>
+                    <div class="temperature-value">
+                        <p><a id="tempeture"></a>°<span>C</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            function myFunction(x1, x2, x3, x4) {
+                let table = document.getElementById("myTable");
+                let row = table.insertRow(-1);
+                let cell1 = row.insertCell(0);
+                let cell2 = row.insertCell(1);
+                let cell3 = row.insertCell(2);
+                let cell4 = row.insertCell(3);
+
+                cell1.innerHTML = x1;
+                cell2.innerHTML = x2;
+                cell3.innerHTML = x3;
+                cell4.innerHTML = x4;
+            }
+        </script>
+        <script>
+            function myFunction1(x1, x2, x3, x4) {
+                let table = document.getElementById("myTable1");
+                let row = table.insertRow(-1);
+                let cell1 = row.insertCell(0);
+                let cell2 = row.insertCell(1);
+                let cell3 = row.insertCell(2);
+                let cell4 = row.insertCell(3);
+
+                cell1.innerHTML = x1;
+                cell2.innerHTML = x2;
+                cell3.innerHTML = x3;
+                cell4.innerHTML = x4;
+            }
+        </script>
+
+
+        <button id="myBtn" class="button-17" role="button">
+            <a class="textb2">טיסות ממתינות להמראה </bar>
+                <a class="count" id="counterA">
+        </button>
+        <button id="myBtn1" class="button-18" role="button">
+            <a class="textb2">טיסות ממתינות לנחיתה </bar>
+                <a class="count" id="counterB">
+        </button>
+
+        <p style="position:unset" id="myMap"></p>
         <button id="remove" onclick="move()">הסר אייקונים</button>
         <button id="add" onclick="add()">הוסף אייקונים</button>
-     
+
+        <!-- the table for containerA -->
+      
+        <div id="myModal" class="modal">
+            <!-- Modal content -->
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <table id="myTable">
+                    <thead>
+                        <th>ID</th>
+                        <th>Ecspected landing</th>
+                        <th>src</th>
+                        <th>destenation</th>
+                    </thead>
+                </table>
+            </div>
+        </div>
+
+        <script>
+            var modal = document.getElementById("myModal");
+            var btn = document.getElementById("myBtn");
+            var span = document.getElementsByClassName("close")[0];
+            btn.onclick = function () {
+                modal.style.display = "block";
+            }
+            span.onclick = function () {
+                modal.style.display = "none";
+            }
+            window.onclick = function (event) {
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                }
+            }
+        </script>
+
+
+        <!-- containerB Model -->
+
+        <div id="myModal" class="modal">
+            <!-- Modal content -->
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <table id="myTable1">
+                    <thead>
+                        <th>ID</th>
+                        <th>Ecspected landing</th>
+                        <th>src</th>
+                        <th>destenation</th>
+                    </thead>
+                </table>
+            </div>
+        </div>
+
+        <script>
+            var modal = document.getElementById("myModal");
+            var btn = document.getElementById("myBtn1");
+            var span = document.getElementsByClassName("close")[0];
+            btn.onclick = function () {
+                modal.style.display = "block";
+            }
+            span.onclick = function () {
+                modal.style.display = "none";
+            }
+            window.onclick = function (event) {
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                }
+            }
+        </script>
+
+
+
 
 
 

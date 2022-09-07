@@ -1,0 +1,134 @@
+/* *{
+    font-family: "Rimouski";
+} */
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans+Condensed:wght@300&display=swap');
+
+body{
+    background-color: #f5f6fa;
+}
+.description{
+    font-family:Arial;
+    font-family: "Google Sans",Roboto,Arial,sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    text-align: center;
+    text-transform: none;
+    color: black;
+
+}
+
+.container{
+    width:201px;
+	height:50px;
+    
+    display: block;
+    /* margin: 0 auto; */
+    
+    border-radius: 10px;
+    /* padding-bottom : 40px;  */
+}
+
+
+.notification{
+    background-color: #f8d7da;
+    display: none;
+    width: 10px;
+    height: 10px;
+}
+
+.notification p{
+    color: #721c24;
+    font-family:Arial;
+    /* font-size: 1.2em; */
+    margin: 0;
+    /* text-align: center; */
+    /* padding: 5px; */
+    width: 10px;
+    height: 10px;
+}
+
+.weather-container{
+    width: 0px;
+    height: 0px;
+    background-color: hsl(16, 78%, 51%);
+    border-radius:8px;
+}
+
+.weather-icon{
+    width: 30px;
+    height: 10px;
+    position: absolute;
+
+}
+
+.weather-icon img{
+    display: block;
+    margin: 0 auto;
+    width: 35px;
+    height:20px;
+    float:right;
+    position: absolute;
+}
+
+.temperature-value{
+    width: 20px;
+    height:20px;
+    position: absolute;
+    padding-top: 20px;
+    color:black;
+}
+
+/* .temperature-value p{
+    width: 30px;
+    height:20px;
+    padding-left:5px;
+    margin: 0;
+    padding-top:20px;
+    position: absolute;
+    font-size: 1em;
+    
+    cursor: pointer;
+}
+
+
+
+.temperature-value span{
+    color: #050608;
+    font-size: 0.5em;
+    width: 30px;
+    height:30px;
+} */
+
+.temperature-description{
+    width: 10px;
+    height:5px;
+    font-family:Arial;
+    padding-left: 25px;
+    margin-left:50px;
+    color: #293251;
+    position: absolute;
+
+
+    /* padding-left: 25px; */
+    /* float:right; */
+}
+
+
+
+.location p{
+    width: 20px;
+    height:10px;
+    float:left;
+    /* margin-bottom:50px; */
+    margin-left:150px;
+    padding: 0;
+    color: #293251;
+    margin-top:10px;
+    margin-right: 1px;
+    position: absolute;
+    /* text-align: center; */
+    font-size: 0.8em;
+}
+
+
+

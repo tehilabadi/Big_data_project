@@ -20,6 +20,8 @@ const flight = (words) => {
         let location1 = words[1];
         let location2 = words[2];
         let location3 = words[3];
+        let src = words[11];
+        let dest = words[12];
         let dir;
         if(words[11]==="\"TLV\""){
           dir = 1;
@@ -27,7 +29,7 @@ const flight = (words) => {
         else{
           dir = 0;
         }
-        let fly = {id,location1,location2,location3,dir};
+        let fly = {id,location1,location2,location3,dir,src,dest};
 
     return fly;
 }
@@ -61,8 +63,8 @@ connection.connect(function(err) {
               .then(async function (response) {
                 mongoData = response.data;
                 let fly = flight(words);
-                var sql = `INSERT INTO details (id, location1,location2,location3, scheduleddeparture, scheduledarrival,realdeparture,realarrival,estimateddeparture,estimatedarrival,landing,TZ) 
-              VALUES (${fly.id},'${fly.location1}','${fly.location2}','${fly.location3}','${mongoData.time.scheduled.departure}','${mongoData.time.scheduled.arrival}','${mongoData.time.real.departure}','${mongoData.time.real.arrival}','${mongoData.time.estimated.departure}','${mongoData.time.estimated.arrival}','${fly.dir}','${temp}');`;
+                var sql = `INSERT INTO details (id, location1,location2,location3, scheduleddeparture, scheduledarrival,realdeparture,realarrival,estimateddeparture,estimatedarrival,landing,TZ,src,dest) 
+              VALUES (${fly.id},'${fly.location1}','${fly.location2}','${fly.location3}','${mongoData.time.scheduled.departure}','${mongoData.time.scheduled.arrival}','${mongoData.time.real.departure}','${mongoData.time.real.arrival}','${mongoData.time.estimated.departure}','${mongoData.time.estimated.arrival}','${fly.dir}','${temp}','${fly.src}','${fly.dest}');`;
               connection.query(sql, function (err, result) {
               if (err) throw err;
         });
