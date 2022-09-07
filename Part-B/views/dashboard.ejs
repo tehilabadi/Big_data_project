@@ -53,21 +53,20 @@
             }
 
             socket.on('new_flight', function (msg) {
-                //console.log(JSON.stringify(msg));
-                let flight = fligh(msg.location1, msg.location2, msg.location3);
-                if (msg.direction == 0) {
+                console.log(JSON.stringify(msg));
+                let flight = fligh(msg.data.lo, msg.data.lo2, msg.data.degree);
+                if (msg.data.direction == 0) {
                     containerA[counterA++] = flight;
-                    myFunction(msg.TZ, msg.arrivel, msg.src, msg.dest);
+                    myFunction(msg.data.id, msg.data.estimatedarrival, msg.data.src, msg.data.dest);
                 }
-                else {
+                else if(msg.data.direction == 1){
                     containerB[counterB++] = flight;
-                    myFunction1(msg.TZ, msg.arrivel, msg.src, msg.dest);
+                    myFunction1(msg.data.id, msg.data.estimatedarrival, msg.data.src, msg.data.dest);
 
                 }
                 document.getElementById('counterA').innerHTML = counterA;
                 document.getElementById('counterB').innerHTML = counterB;
 
-                //console.log(counter);
             });
 
             socket.on('allData', function (msg) {
@@ -90,7 +89,10 @@
                 let counterA = 0;
                 let counterB = 0;
             });
-
+            socket.on("hel",function (msg){
+                console.log(msg.data.lo);
+                
+            });
 
 
             //var counter = document.getElementById("counter");
@@ -265,6 +267,21 @@
         <button id="remove" onclick="move()">הסר אייקונים</button>
         <button id="add" onclick="add()">הוסף אייקונים</button>
 
+        <div id="myModal1" class="modal">
+            <!-- Modal content -->
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <table id="myTable1">
+                    <thead>
+                        <th>ID</th>
+                        <th>Ecspected landing</th>
+                        <th>src</th>
+                        <th>destenation</th>
+                    </thead>
+                </table>
+            </div>
+        </div>
+        
         <!-- the table for containerA -->
       
         <div id="myModal" class="modal">
@@ -283,6 +300,14 @@
         </div>
 
         <script>
+            var modal1 = document.getElementById("myModal1");
+            var btn1 = document.getElementById("myBtn1");
+            var span = document.getElementsByClassName("close")[0];
+            btn1.onclick = function () {
+                modal1.style.display = "block";
+            }
+            
+            
             var modal = document.getElementById("myModal");
             var btn = document.getElementById("myBtn");
             var span = document.getElementsByClassName("close")[0];
@@ -296,43 +321,18 @@
                 if (event.target == modal) {
                     modal.style.display = "none";
                 }
+                else if (event.target == modal1) {
+                    modal1.style.display = "none";
+                }
             }
         </script>
 
 
         <!-- containerB Model -->
 
-        <div id="myModal" class="modal">
-            <!-- Modal content -->
-            <div class="modal-content">
-                <span class="close">&times;</span>
-                <table id="myTable1">
-                    <thead>
-                        <th>ID</th>
-                        <th>Ecspected landing</th>
-                        <th>src</th>
-                        <th>destenation</th>
-                    </thead>
-                </table>
-            </div>
-        </div>
+        
 
-        <script>
-            var modal = document.getElementById("myModal");
-            var btn = document.getElementById("myBtn1");
-            var span = document.getElementsByClassName("close")[0];
-            btn.onclick = function () {
-                modal.style.display = "block";
-            }
-            span.onclick = function () {
-                modal.style.display = "none";
-            }
-            window.onclick = function (event) {
-                if (event.target == modal) {
-                    modal.style.display = "none";
-                }
-            }
-        </script>
+        
 
 
 

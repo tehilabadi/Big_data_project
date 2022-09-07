@@ -1,6 +1,6 @@
 const db = require('./redisConnection');
 
-const keys = ["location1","location2","location3"];
+const keys = ["flight"];
 
 const todayEnd = new Date().setHours(23, 59, 59, 999);
 
@@ -27,7 +27,6 @@ const redisDB = {
 
     //Increase valus of specific key
     incrementByOne: async function(key){
-        
         try {
             // check if the key exists
             const exists = await db.exists(key);
@@ -69,14 +68,8 @@ const redisDB = {
     setTopic: async function(topic, value) {
         // we can refactor this
         switch(topic) {
-            case 'location1':
-                await this.setWaiting('location1', value);
-                break;
-            case 'location2':
-                await this.setWaiting('location2', value);
-                break;
-            case 'location3':
-                await this.setWaiting('location3', value);
+            case 'flight':
+                await this.setWaiting('flight', value);
                 break;
             default:
                 console.log('invalid topic');
@@ -89,9 +82,7 @@ const redisDB = {
 
     getAllData: async function() {
         let allData = [];
-
-        //Topic + waiting
-        allData.push(await db.get('location1'));
+        allData.push(await db.get('flight'));
         
         //Cities
         // console.log("Get all data from Redis!");

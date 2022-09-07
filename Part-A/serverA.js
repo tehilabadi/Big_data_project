@@ -54,16 +54,6 @@ io.on("connection", (socket) => {
             kafpro.publish(weather);
             }
         }
-        // console.log(data.weather);
-        // console.log(JSON.stringify(data.weather));
-        // console.log(typeof data.weather);
-        // console.log(data);
-        // let weather = {};
-
-        // weather.temp = data.main.temp;
-        // var t= JSON.stringify(data.weather);
-        // weather.icon = t;
-        // kafpro.publish(weather);
       })
       .catch(async function (error) {
           console.log("error from serverA" + error)

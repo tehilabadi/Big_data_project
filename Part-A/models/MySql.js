@@ -95,9 +95,8 @@ connection.connect(function(err) {
     
   });
 }
-
-// setInterval(add,10000);
-add();
+setInterval(add,10000);
+// add();
 
     module.exports = connection;
 

@@ -34,20 +34,15 @@ io.on("connection", async (socket) => {
             console.log("weather print serverB");
         }
         else{
-            io.emit("new_flight", {location1: flight.lo, location2: flight.lo2, location3: flight.degree , direction :flight.direction, TZ:flight.id, arrivel:flight.estimatedarrival,src : flight.src , dest : flight.dest});
+            redis.setTopic("flight",msg.value);
+            let allDataArray = await redis.getAllData();
+            // io.emit("hel", {data: JSON.parse(allDataArray[0])});
+            // console.log(allDataArray[0]);
+            io.emit("new_flight", {data: JSON.parse(allDataArray[0])});
+
+            // io.emit("new_flight", {location1: flight.lo, location2: flight.lo2, location3: flight.degree , direction :flight.direction, TZ:flight.id, arrivel:flight.estimatedarrival,src : flight.src , dest : flight.dest});
         }
-        //         flight.lo = word.location1;
-        //         flight.lo2 = word.location2;
-        //         flight.degree=word.location3;
-        //         flight.scheduleddeparture = word.scheduleddeparture;
-        //         flight.lscheduledarrival = word.scheduledarrival;
-        //         flight.realdeparture=word.realdeparture;
-        //         flight.realarrival=word.realarrival;
-        //         flight.estimateddeparture=word.estimateddeparture;
-        //         flight.estimatedarrival=word.estimatedarrival;
-        //         flight.id = word.TZ;
-        // console.log("kaafka info");
-        // console.log(flight.lo);
+       
     });
 
 //----------------Front Side  ------------------
